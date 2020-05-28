@@ -1,0 +1,54 @@
+{% extends 'familytree/index.html' %} {% block content %}
+<div style="width:100%">
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">Basic Detail</legend>
+    <form
+      action="/familytree/success/"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <div class="form-inline">
+      <div class="form-group ml-2">
+      <label for="exampleFormControlInput1" style="color:white">First Name</label>
+        <input type="text" class="form-control form-control-sm" id="fname" name="fname" placeholder="First Name">
+      </div>
+      <div class="form-group ml-4">
+      <label for="exampleFormControlInput1" style="color:white">Middle Name</label>
+        <input type="text" class="form-control form-control-sm" id="mname" name="mname" placeholder="Middle Name">
+      </div>
+      <div class="form-group ml-4">
+      <label for="exampleFormControlInput1" style="color:white">Last Name</label>
+        <input type="text" class="form-control form-control-sm" id="lname" name="lname" placeholder="Last Name">
+      </div>
+    </div>
+    <div class="form-inline">
+      <div class="form-group ml-2 mt-4">
+      <label for="exampleFormControlInput1" style="color:white">Email Address </label>
+        <input type="email" class="form-control form-control-sm" id="emailadd" name="emailadd" placeholder="Email Address">
+      </div>
+      <div class="form-group ml-4 mt-4">
+      <label for="exampleFormControlInput1" style="color:white">Contact No.</label>
+        <input type="text" class="form-control form-control-sm" id="mobile1" name="mobile1" placeholder="Contact Number">
+      </div>
+      <div class="form-group ml-4 mt-4">
+      <label for="exampleFormControlInput1" style="color:white">Birth Date</label>
+        <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Birth Date">
+      </div>
+    </div>
+    <div class="form-inline">
+      <div class="form-group mt-4">
+        <label for="exampleFormControlInput1" style="color:white">Upload Image</label>
+          <input type="file" class="form-control form-control-sm" id="myfile" name="myfile" />
+      </div>   
+    </div>
+    <div class="form-inline">
+      <div class="form-group ml-2 mt-4">
+      <button type="submit" class="btn btn-primary">Submit</button>&nbsp;&nbsp;
+      <button type="submit" class="btn btn-secondary" onclick="window.history.back();return false;">Cancle</button>
+      </div>
+    </div>  
+    </form>
+  </fieldset>
+</div>  
+{% endblock %}

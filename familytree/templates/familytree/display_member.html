@@ -1,0 +1,63 @@
+{% extends 'familytree/index.html' %}
+{% block content %}
+<center><h3>Member <a class="btn-sm btn-info" href="add" role="button" onclick="{% url 'new-member' %}">+</a></h3> </center>
+
+    <div style="float:right">
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+  </div>
+  <input type="text" class="form-control" name="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+</div>
+
+    </div>
+    <table class="table table-stripedtable table-striped table-light table-sm">
+    <thead class="thead-light">
+        <tr>
+        <th scope="col">Action</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Middle Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Contact No.</th>
+        <th scope="col">Date of Birth</th>
+        </tr>
+    </thead>
+    <tbody >
+    {% for member in data %}
+        <tr>
+        <th scope="row"><a href="{% url 'update-member' member.IDProduct %}">Edit</a></th>
+        <td>{{ member.fname }}</td>
+        <td>{{ member.Provider }}</td>
+        <td>{{ member.Category_it }}</td>
+        <td>{{ member.Category_en }}</td>
+        <td>{{ member.UnitQuantity_it }}</td>
+        </tr>
+    {% endfor %}    
+    </tbody>
+    </table>
+
+    {{data.page}}
+    {% if data.has_other_pages %}
+    <nav aria-label="Page navigation example">
+    <ul class="pagination">
+    {% if data.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ data.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% for i in data.paginator.page_range %}
+        {% if data.number == i %}
+            <li class="page-item active"><a class="page-link" href="#">{{i}} <span class="sr-only">(current)</span></a></li>
+        {% elif i > data.number|add:'-3' and i < data.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+        {% endif %}
+                
+    {% endfor %}
+    {% if data.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ data.next_page_number }}">Next</a></li>
+    {% endif %}
+    </ul>
+    </nav>    
+    {% endif %}    
+
+
+
+{% endblock content%}

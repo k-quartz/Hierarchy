@@ -1,0 +1,27 @@
+<div style="width:100%">
+  <fieldset class="form-group">
+    <table class="table table-sm table-dark">
+      <thead>
+        <tr >
+          <th scope="col">First Name</th>
+          <th scope="col">Middle Name</th>
+          <th scope="col">Last Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input class="form-control form-control-sm" type="text" name="fname" id="dfname" placeholder="First Name" value={{fname|default:"&nbsp;"}} /></td>
+          <td><input class="form-control form-control-sm" type="text" name="mname" id="dmname" placeholder="Middle Name" value={{mname|default:"&nbsp;"}} /></td>
+          <td><input class="form-control form-control-sm" type="text" name="lname" id="dlname" placeholder="Last Name" value={{lname|default:"&nbsp;"}} /></td>
+        </tr>
+        {% for member in filtered_list %}
+        <tr>
+          <td><a href="{% url 'add-family' m_id member.memberid relationtypeid %}">{{member.fname}}</a></td>
+          <td><a href="#" >{{member.mname}}</a></td>
+          <td><a href="#" >{{member.lname}}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </fieldset>  
+</div>

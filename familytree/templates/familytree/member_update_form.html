@@ -1,0 +1,158 @@
+{% extends 'familytree/index.html' %} {% block content %}
+<div class="row">
+  <img src="/media/{{member.memberid}}/{{member.mem_img}}" width="100px" height="100px" />
+</div>  
+<div style="width:100%">
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">Basic Detail</legend>
+    <form
+      action="/familytree/success"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+    <div class="form-inline">
+      <div class="form-group ml-2">
+      <label for="exampleFormControlInput1" >First Name</label>
+        <input type="text" class="form-control form-control-sm" id="fname" name="fname" placeholder="First Name" value={{member.fname}} >
+      </div>
+      <div class="form-group ml-4">
+      <label for="exampleFormControlInput1" >Middle Name</label>
+        <input type="text" class="form-control form-control-sm" id="mname" name="mname" placeholder="Middle Name" value={{member.mname}} >
+      </div>
+      <div class="form-group ml-4">
+      <label for="exampleFormControlInput1" >Last Name</label>
+        <input type="text" class="form-control form-control-sm" id="lname" name="lname" placeholder="Last Name" value={{member.lname}} >
+      </div>
+    </div>
+    <div class="form-inline">
+      <div class="form-group ml-2 mt-4">
+      <label for="exampleFormControlInput1" >Email Address </label>
+        <input type="email" class="form-control form-control-sm" id="emailadd" name="emailadd" placeholder="Email Address" value={{member.email}} >
+      </div>
+      <div class="form-group ml-4 mt-4">
+      <label for="exampleFormControlInput1" >Contact No.</label>
+        <input type="text" class="form-control form-control-sm" id="mobile1" name="mobile1" placeholder="Contact Number" value={{member.mobile1}} >
+      </div>
+      <div class="form-group ml-4 mt-4">
+      <label for="exampleFormControlInput1" >Birth Date</label>
+        <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Birth Date" value="{{member.dob|date:'Y-m-d'}}">
+      </div>
+    </div>
+    <div class="form-inline">
+      <div class="form-group mt-4">
+        <label for="exampleFormControlInput1" >Upload Image</label>
+          <input type="file" class="form-control form-control-sm" id="myfile" name="myfile" />
+      </div>   
+    </div>
+    <div class="form-inline">
+      <div class="form-group ml-2 mt-4" >
+      <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+      </div>
+      <div class="form-group ml-5 mt-4">
+      <a class="btn btn-success" href="#" role="button" >Personal Detail</a>
+      </div>
+    </div>  
+    </form>
+  </fieldset>
+</div>
+<div style="width:100%">
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">Add family Member</legend>
+    <table class="table table-sm table-dark">
+      <thead>
+        <tr >
+          <th scope="col">First Name</th>
+          <th scope="col">Middle Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Relation</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m_member in memberlist %}
+          <tr>
+            <td>{{m_member.relative.fname }}</td>
+            <td>{{m_member.relative.mname }}</td>
+            <td>{{m_member.relative.lname }}</td>
+            <td>{{m_member.relationtype.relationtype }}</td>
+            <td><button class="btn-danger" name="deletemember" >Delete</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td><input class="form-control form-control-sm" type="text" name="fname" id="dfname" placeholder="First Name" /></td>
+          <td><input class="form-control form-control-sm" type="text" name="mname" id="dmname" placeholder="Middle Name" /></td>
+          <td><input class="form-control form-control-sm" type="text" name="lname" id="dlname" placeholder="Last Name" /></td>
+          <td>
+            <select id="relationid" class="custom-select-sm" onchange="EnableAdd();">
+              <option value="0">Select Relation</option>
+              {% for relation in relationlist %}
+                <option value={{relation.relationtypeid}}>{{relation.relationtype}}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><button onclick="OpenModal()" id="openbtn" class="btn-info openbtn" style="visibility:hidden" name="search" type="button" data-toggle="modal" data-target="#exampleModalCenter"  >Search</td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>  
+
+
+      <div style="color:black" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Search Member Result</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="divcontent">
+            
+              
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+</div>
+
+<script>
+function OpenModal(){
+         var fname=document.getElementById('dfname').value;
+         var mname=document.getElementById('dmname').value;
+         var lname=document.getElementById('dlname').value;
+         var obje=document.getElementById('relationid');
+         var reltpid=obje.options[obje.selectedIndex].value;
+         
+         var m_id='{{member.memberid}}';
+
+            $.ajax({
+                type:'GET',
+                url: "{% url 'display_modal' %}",
+                data: { fname,mname,lname, m_id, reltpid },
+                success: function(ret_html){
+                    document.getElementById("divcontent").innerHTML=ret_html;
+                },
+                error: function(){
+                    alert("Link not Working");
+                }
+            });
+        }
+
+function EnableAdd(){
+  var e=document.getElementById('relationid');
+  id=e.options[e.selectedIndex].value;
+  
+  if(id>0){
+    document.getElementById('openbtn').style.visibility ="visible";
+  }
+  else{
+    document.getElementById('openbtn').style.visibility ="hidden";
+  }
+}        
+</script>
+{% endblock %}
+
