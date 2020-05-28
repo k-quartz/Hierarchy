@@ -1,0 +1,11 @@
+.Mfieldset {
+  display: block;
+  margin-left: 12px;
+  margin-right: 12px;
+  padding-top: 2em;
+  padding-bottom: 4em;
+  padding-left: 3em;
+  padding-right: 3em;
+  border: 2px groove (internal value);
+  background-color: whitesmoke;
+}
