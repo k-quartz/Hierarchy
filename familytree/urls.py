@@ -14,5 +14,6 @@ urlpatterns = [
     path('success/', views.success, name="ft-success"),
     path('member/addfamily/<int:mid>/<int:newid>/<int:reltypeid>',
          views.addFamily, name='add-family'),
+    path('member/personal/<int:id>', views.personalDetail, name='member-personal')
 
 ]

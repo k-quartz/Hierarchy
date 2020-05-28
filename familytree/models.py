@@ -28,6 +28,50 @@ class BloodGroup(models.Model):
         db_table = 'bloodgroup'
 
 
+class States(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    statesid = models.AutoField(primary_key=True)
+    states = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'states'
+
+
+class City(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    cityid = models.AutoField(primary_key=True)
+    city = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'city'
+
+
+class OccupationType(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    occupationtypeid = models.AutoField(primary_key=True)
+    occupationtype = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'occupationtype'
+
+
+class ResidenceType(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    residencetypeid = models.AutoField(primary_key=True)
+    residencetype = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'residencetype'
+
+
 class RelationType(models.Model):
     agre = models.BooleanField(default=False, editable=False)
     reject = models.BooleanField(default=False, editable=False)
@@ -37,23 +81,6 @@ class RelationType(models.Model):
     class Meta:
         managed = False
         db_table = 'relationtype'
-
-
-class MemPersonal(models.Model):
-    agre = models.BooleanField(default=False, editable=False)
-    reject = models.BooleanField(default=False, editable=False)
-    mempersonalid = models.AutoField(primary_key=True)
-    dob = models.DateTimeField(blank=True, null=True)
-    bloodgroup = models.ForeignKey(BloodGroup, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
-    locality = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'mempersonal'
 
 
 class Member(models.Model):
@@ -94,3 +121,71 @@ class MemberPrt(models.Model):
     class Meta:
         managed = False
         db_table = 'memberprt'
+
+
+class MemPersonal(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    mempersonalid = models.AutoField(primary_key=True)
+    dob = models.DateTimeField(blank=True, null=True)
+    bloodgroup = models.ForeignKey(BloodGroup, on_delete=models.CASCADE)
+    address = models.TextField()
+    locality = models.CharField(max_length=100)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    state = models.ForeignKey(States, on_delete=models.CASCADE)
+    country = models.CharField(max_length=100)
+    yearlyincome = models.FloatField()
+    resdidence = models.ForeignKey(ResidenceType, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'mempersonal'
+
+
+class Qualification(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    qualificationid = models.AutoField(primary_key=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    qualification = models.CharField(max_length=100)
+    university = models.CharField(max_length=255)
+    passingyear = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'qualification'
+
+
+class Occupation(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    occupationid = models.AutoField(primary_key=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    occupationtype = models.ForeignKey(
+        OccupationType, on_delete=models.CASCADE)
+    company_name = models.CharField(max_length=255)
+    designation = models.CharField(max_length=255)
+    office_add = models.TextField()
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    state = models.ForeignKey(States, on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'occupation'
+
+
+class HealthSheet(models.Model):
+    agre = models.BooleanField(default=False, editable=False)
+    reject = models.BooleanField(default=False, editable=False)
+    healthsheetid = models.AutoField(primary_key=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    diesase = models.CharField(max_length=200)
+    diagnose_dt = models.DateTimeField(default=timezone.now)
+    doctor_consulted = models.CharField(max_length=200)
+    treatment = models.TextField()
+    cured = models.BooleanField(default=False, editable=False)
+
+    class Meta:
+        managed = False
+        db_table = 'healthsheet'

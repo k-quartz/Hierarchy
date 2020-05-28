@@ -130,3 +130,12 @@ def addFamily(request, mid, newid, reltypeid):
     memberprt.save()
 
     return redirect('update-member', id=mid)
+
+
+def personalDetail(request, id):
+    print("akash")
+    member = Member.objects.filter(memberid=id)
+    fname = member[0].fname
+    lname = member[0].lname
+    member_name = fname + " " + lname
+    return render(request, "familytree/personal_detail.html", {"member_name": member_name})
